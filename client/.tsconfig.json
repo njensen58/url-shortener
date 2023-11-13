@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+        "jsx": "react-jsx",
+        "strict": true,
+        "baseUrl": "./node_modules",
+        "esModuleInterop": true,
+        "target": "es5",
+        "lib": [
+            "es5",
+            "dom"
+        ]
+    },
+    "include": [
+        "src/**/*.tsx"
+    ],
+    "exclude": [
+        "src/**/*.spec.ts"
+    ]
+}
