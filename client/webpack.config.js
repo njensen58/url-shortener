@@ -5,7 +5,7 @@ module.exports = {
     entry: "./src/index.tsx",
     output: {
         filename: "main.js",
-        path: path.resolve(__dirname, "build"),
+        path: path.resolve(__dirname, "./dist"),
     },
     module: {
         rules: [
@@ -20,9 +20,11 @@ module.exports = {
                 options: {
                     configFile: ".tsconfig.json",
                 }
+            },
+            {
+                test: /\.css$/i,
+                use: ['style-loader', 'css-loader', 'postcss-loader'],
             }
-            // TODO: Add styling rules
-            // TODO: Add filetype rules
         ],
     },
     resolve: {

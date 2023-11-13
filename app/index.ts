@@ -7,11 +7,25 @@ import Config from './config';
 const app = express();
 const client = createClient()
 
+app.use(express.json());
+
 
 app.use("/api", async (req: Request, res: Response) => {
-    await client.set('key', 'value');
-    const value = await client.get('key');
-    res.json(value);
+    const longUrl = req?.body?.url;
+
+    // #TODO:  if not valid url, return an ERROR here
+
+
+    // await client.set('key', 'value');
+    // const value = await client.get('key');
+
+    const response = {
+        key: "",
+        long_url: longUrl,
+        short_url: ""
+    }
+
+    res.json(response);
 })
 
 const listenPort = (PORT: number) => {
@@ -23,8 +37,6 @@ const listenPort = (PORT: number) => {
 async function start() {
     await client.connect();
     client.on('error', err => console.log('Redis Client Error', err))
-
-    await app.use(express.json());
     await listenPort(Config.SERVICE_PORT);
 };
 

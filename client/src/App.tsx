@@ -1,12 +1,12 @@
 import React from 'react';
+import MainContainer from './components/MainContainer';
+import './app.css';
 
 const App = () => {
-    const [text, setText] = React.useState("Hello World")
-
-    fetch("/api").then(res => res.json()).then(res => setText(res))
-
     return (
-        <div>{text}</div>
+        <div className="flex justify-center items-center h-screen">
+            <MainContainer />
+        </div>
     )
 }
 
