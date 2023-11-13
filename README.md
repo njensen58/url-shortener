@@ -1,6 +1,9 @@
 # URL-Shortener
 * In progress
 
+# Stack
+- React/Typescript/Node/Redis
+
 ## Get Started
  * install dependenies for Client and App with `npm i` in root and client dirs.
  * Create a local docker redis container (requires redis and docker installation first).
