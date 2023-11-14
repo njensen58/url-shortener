@@ -51,7 +51,7 @@ class ShortenerService {
                 data: {
                     key: shortUrl,
                     long_url: longUrl,
-                    short_url: `http://localhost/${shortUrl}`
+                    short_url: `http://localhost:3000/${shortUrl}`
                 }
             }
         }
@@ -75,7 +75,7 @@ class ShortenerService {
             data: {
                 key: shortUrl,
                 long_url: longUrl,
-                short_url: `http://localhost/${shortUrl}`
+                short_url: `http://localhost:3000/${shortUrl}`
             }
         }
     }
@@ -100,7 +100,7 @@ class ShortenerService {
                 data: {
                     key: alias,
                     long_url: longUrl,
-                    short_url: `http://localhost/${alias}`
+                    short_url: `http://localhost:3000/${alias}`
                 },
                 error: null
             }
@@ -123,7 +123,7 @@ class ShortenerService {
             data: {
                 key: alias,
                 long_url: longUrl,
-                short_url: `http://localhost/${alias}`
+                short_url: `http://localhost:3000/${alias}`
             },
             error: null
         }
