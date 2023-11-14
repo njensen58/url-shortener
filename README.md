@@ -1,5 +1,6 @@
 # URL-Shortener
 * App built to practice different techs in a fullstack environment.  
+* This guide was used for broad steps [GUIDE](https://codingchallenges.fyi/challenges/challenge-url-shortener/)
 
 ## Stack
 - React, Typescript, Node, Redis
