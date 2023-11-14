@@ -1,32 +1,14 @@
-import express, { Request, Response } from 'express';
-
+import express, { NextFunction, Request, Response } from 'express';
 import { createClient } from 'redis';
 import Config from './config';
-
+import shortenerRouter from './routers/shortenerRouter';
 
 const app = express();
-const client = createClient()
+const client = createClient();
 
 app.use(express.json());
 
-
-app.use("/api", async (req: Request, res: Response) => {
-    const longUrl = req?.body?.url;
-
-    // #TODO:  if not valid url, return an ERROR here
-
-
-    // await client.set('key', 'value');
-    // const value = await client.get('key');
-
-    const response = {
-        key: "",
-        long_url: longUrl,
-        short_url: ""
-    }
-
-    res.json(response);
-})
+app.use("/api", shortenerRouter(client));
 
 const listenPort = (PORT: number) => {
     app.listen(PORT, () =>
@@ -39,6 +21,12 @@ async function start() {
     client.on('error', err => console.log('Redis Client Error', err))
     await listenPort(Config.SERVICE_PORT);
 };
+
+// Global catch all
+app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
+    console.error(error);
+    return res.status(500).json({ error: "Something went wrong." });
+})
 
 export default {
     start

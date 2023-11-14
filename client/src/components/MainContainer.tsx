@@ -1,41 +1,59 @@
 import React, { ChangeEvent } from 'react';
+import InputScreen from './InputScreen';
+import FinalScreen from './FinalScreen';
+import ErrorDisplay from './ErrorDisplay';
+import HttpRequest from '../lib/http';
+import { SuccessData } from '../lib/http';
+
 
 const MainContainer = () => {
-    const [text, setText] = React.useState("")
+    const [url, setUrl] = React.useState<string>("");
+    const [alias, setAlias] = React.useState<string>("");
+    const [data, setData] = React.useState<SuccessData | undefined>(undefined);
+    const [error, setError] = React.useState<string>("");
 
-    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-        setText(e.target.value)
+    const handleUrlChange = (e: ChangeEvent<HTMLInputElement>) => {
+        setUrl(e.target.value)
+    }
+
+    const handleAliasChange = (e: ChangeEvent<HTMLInputElement>) => {
+        setAlias(e.target.value)
     }
 
     const handleClick = async () => {
-        const fetchOpts = {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ url: text })
+        setError("");
+        try {
+            const res = await new HttpRequest("POST", "/api", { url, alias }).request();
+            setData(res.data)
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                let err = error.message || "Something went wrong, please try again."
+                console.error(error)
+                setError(err)
+            } else {
+                setError("Something went wrong, please try again.");
+            }
         }
-        const res = await fetch("/api", fetchOpts)
-        const data = await res.json();
     }
 
     return (
         <div className="max-w-md mx-auto bg-blue-800 p-4">
-            <p className="text-stone-200 mb-2">My-Url-Shortener</p>
-            <div className="shadow-md bg-zinc-200 rounded p-2">
-                <input
-                    type="text"
-                    value={text}
-                    onChange={handleChange}
-                    placeholder="Enter long link here"
-                    className="rounded p-1"
+            <p className="text-stone-200 mb-2 text-4xl">My-Url-Shortener</p>
+            {!data?.short_url ?
+                <InputScreen
+                    url={url}
+                    alias={alias}
+                    handleClick={handleClick}
+                    handleUrlChange={handleUrlChange}
+                    handleAliasChange={handleAliasChange}
                 />
-                <button
-                    onClick={handleClick}
-                    className="border-2 border-slate-500 rounded mt-2 p-1 block">
-                    Shorten!
-                </button>
-            </div>
+                :
+                <FinalScreen
+                    longUrl={data.long_url}
+                    shortUrl={data.short_url}
+                />
+            }
+            <ErrorDisplay error={error} />
         </div>
     )
 }
