@@ -1,6 +1,7 @@
 # URL-Shortener
 * App built to practice different techs in a fullstack environment.  
 * This guide was used for broad steps [GUIDE](https://codingchallenges.fyi/challenges/challenge-url-shortener/)
+* Incorporates the use of MD5 to base64 for hash.
 
 ## Stack
 - React, Typescript, Node, Redis
