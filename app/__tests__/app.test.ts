@@ -15,7 +15,8 @@ describe("Server", () => {
 
     beforeAll(async () => {
         startedContainer = await container.start();
-        redisClient = createClient(startedContainer.getMappedPort(6379), startedContainer.getHost())
+        const connection = `redis://nate:nsj89=NSJ@${startedContainer.getHost()}:${startedContainer.getMappedPort(6379)}`
+        redisClient = createClient(connection)
         jest.spyOn(RedisService.prototype, 'createClient').mockImplementationOnce(() => redisClient)
     })
 
@@ -24,29 +25,22 @@ describe("Server", () => {
         await redisClient.quit();
     })
 
-    it("returns error if invalid URL provided", (done) => {
-        request(app)
-            .post('/api')
+    it("returns error if invalid URL provided", async () => {
+        const result = await request(app)
+            .post("/api")
             .send({ url: "invalid" })
             .set('Accept', 'application/json')
-            .expect(400)
-            .end(function (err: any, res: any) {
-                if (err) return done(err);
 
-                return done();
-            })
+        expect(result.status).toBe(400)
     });
 
-    it("returns error if invalid ALIAS provided", (done) => {
-        request(app)
+    it("returns error if invalid ALIAS provided", async () => {
+        const result = await request(app)
             .post('/api')
             .send({ url: "www.google.com", alias: "bad" })
             .set('Accept', 'application/json')
-            .expect(400)
-            .end(function (err: any, res: any) {
-                if (err) return done(err);
-                return done();
-            })
+
+        expect(result.status).toBe(400)
     });
 
     it("returns alias short if valid alias and no collision", async () => {
