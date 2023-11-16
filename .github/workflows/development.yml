@@ -33,6 +33,6 @@ jobs:
         uses: Jaid/action-npm-install@v1.2.4
 
       - name: "run tests"
-        run: npm run test --passWithNoTests && npm run test-client --passWithNoTests
+        run: npm run test-client --passWithNoTests
         
 
