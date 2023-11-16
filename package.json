@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "tsc && nodemon dist/index.js",
+    "test-client": "cd client && npm test",
     "test": "jest"
   },
   "keywords": [],
