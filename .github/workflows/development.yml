@@ -32,8 +32,7 @@ jobs:
       - name: "install dependencies"
         uses: Jaid/action-npm-install@v1.2.4
 
-      # TODO: Reintroduce once tests are being merged to main
-      # - name: "run tests"
-      #   run: npm run test-client --passWithNoTests
+      - name: "run tests"
+        run: npm run test-client --passWithNoTests
         
 
