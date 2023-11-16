@@ -13,8 +13,43 @@ on:
   workflow_call:
 
 jobs:
-  test:
-    name: Test Application
+  tsc:
+    name: tsc-build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.1.1
+
+      - name: "setup node"
+        uses: actions/setup-node@v4.0.0
+        with: 
+          node-version: 18
+      
+      - name: "install dependencies"
+        run: npm i && cd client && npm i
+
+      - name: tsc
+        uses: icrawl/action-tsc@v1
+  
+  build:
+    name: client-build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.1.1
+
+      - name: "setup node"
+        uses: actions/setup-node@v4.0.0
+        with: 
+          node-version: 18
+      
+      - name: "install dependencies"
+        run: npm i && cd client && npm i
+
+      - name: "build client"
+        run: npm run build-client
+      
+
+  test-client:
+    name: Test Client Application
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -30,10 +65,35 @@ jobs:
         run: npm i -g npm@latest
 
       - name: "install dependencies"
-        uses: Jaid/action-npm-install@v1.2.4
+        run: npm i && cd client && npm i
 
-      # TODO: Reintroduce once tests are being merged to main
-      # - name: "run tests"
-      #   run: npm run test-client --passWithNoTests
+      - name: "run tests"
+        run: npm run test-client --passWithNoTests
+  
+  test-app:
+    name: Test Server Application
+    runs-on: ubuntu-latest
+    container: node:20
+    services:
+        redis:
+          image: redis
+          options: >-
+            --health-cmd "redis-cli ping"
+            --health-interval 10s
+            --health-timeout 5s
+            --health-retries 5
+    steps:
+      - name: "Checkout Repo"
+        uses: actions/checkout@v4.1.1
+      
+      - name: "Install deps"
+        run: npm i
+
+      - name: "Run tests"
+        run: npm test
+        env:
+          REDIS_HOST: redis
+          REDIS_PORT: 6379
+    
         
 

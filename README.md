@@ -9,14 +9,17 @@
 ## Techs
 - Tailwindcss, jest, Webpack, postcss
 
+## CI
+- Github actions
+
 ## Get Started
  * install dependencies for Client and App with `npm i` in root and client dirs.
  * Create a local docker redis container (requires redis and docker installation first).
-    - `docker run -p 6379:6379 -it redis/redis-stack-server:latest`
+ * Start redis docker instance in server with `npm run docker-redis`
  * Start up server with `npm run start`
  * Start up client with `npm start`
 
 ## Issues / TODO
 * No collision handling, collision = NoGo
 * No network load balancing 
-* No tests written
+* Backend tests not passing fully, so not included in CI currently

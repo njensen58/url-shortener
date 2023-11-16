@@ -118,7 +118,7 @@ class ShortenerService {
         // If it exists and isn't a collision, treat it as a GET and just
         // return the existing url.
         return {
-            status: 201,
+            status: 200,
             data: {
                 key: alias,
                 long_url: longUrl,
