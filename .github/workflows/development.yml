@@ -73,7 +73,7 @@ jobs:
   test-app:
     name: Test Server Application
     runs-on: ubuntu-latest
-    container: node:18.12.1-alpine3.1
+    container: node:20
     services:
         redis:
           image: redis
