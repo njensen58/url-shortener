@@ -1,0 +1,39 @@
+# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
+
+name: Node.js CI
+
+on:
+  pull_request:
+    types:
+      - opened
+      - edited
+      - synchronize
+      - reopened
+  workflow_call:
+
+jobs:
+  test:
+    name: Test Application
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: "checkout repository"
+        uses: actions/checkout@v4.1.1
+
+      - name: "setup node"
+        uses: actions/setup-node@v4.0.0
+        with: 
+          node-version: 18
+
+      - name: "install npm@latest"
+        run: npm i -g npm@latest
+
+      - name: "install dependencies"
+        uses: Jaid/action-npm-install@v1.2.4
+
+      # TODO: Reintroduce once tests are being merged to main
+      # - name: "run tests"
+      #   run: npm run test-client --passWithNoTests
+        
+

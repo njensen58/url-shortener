@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "tsc && nodemon dist/index.js",
-    "test": "jest --detectOpenHandles",
-    "docker-redis": "docker run -p 6379:6379 -it redis/redis-stack-server:latest"
+    "test-client": "cd client && npm test",
+    "test": "jest"
   },
   "keywords": [],
   "author": "",
