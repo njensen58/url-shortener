@@ -6,7 +6,8 @@
   "scripts": {
     "start": "tsc && nodemon dist/index.js",
     "test-client": "cd client && npm test",
-    "test": "jest"
+    "test": "jest",
+    "build-client": "cd client && npm run build"
   },
   "keywords": [],
   "author": "",

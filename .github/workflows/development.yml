@@ -29,7 +29,24 @@ jobs:
 
       - name: tsc
         uses: icrawl/action-tsc@v1
-        
+  
+  build:
+    name: client-build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.1.1
+
+      - name: "setup node"
+        uses: actions/setup-node@v4.0.0
+        with: 
+          node-version: 18
+      
+      - name: "install dependencies"
+        run: npm i && cd client && npm i
+
+      - name: "build client"
+        run: npm run build-client
+      
 
   test:
     name: Test Application
