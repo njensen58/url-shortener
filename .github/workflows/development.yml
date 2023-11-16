@@ -30,7 +30,7 @@ jobs:
         run: npm i -g npm@latest
 
       - name: "install dependencies"
-        uses: npm i && cd client && npm i
+        run: npm i && cd client && npm i
 
       - name: "run tests"
         run: npm run test-client --passWithNoTests
