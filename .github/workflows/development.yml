@@ -13,6 +13,24 @@ on:
   workflow_call:
 
 jobs:
+  tsc:
+    name: tsc-build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.1.1
+
+      - name: "setup node"
+        uses: actions/setup-node@v4.0.0
+        with: 
+          node-version: 18
+      
+      - name: "install dependencies"
+        run: npm i && cd client && npm i
+
+      - name: tsc
+        uses: icrawl/action-tsc@v1
+        
+
   test:
     name: Test Application
     runs-on: ubuntu-latest
