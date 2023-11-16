@@ -14,7 +14,7 @@ describe("Server", () => {
 
     beforeAll(async () => {
         startedContainer = await container.start();
-        const connection = `redis://:@${startedContainer.getHost()}:${startedContainer.getMappedPort(6379)}`
+        const connection = `redis://:@${process.env.REDIS_HOST || startedContainer.getHost()}:${process.env.REDIS_PORT || startedContainer.getMappedPort(6379)}`
         redisClient = createClient(connection)
         jest.spyOn(RedisService.prototype, 'createClient').mockImplementationOnce(() => redisClient)
         await redisClient.connect();

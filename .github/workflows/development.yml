@@ -73,17 +73,7 @@ jobs:
   test-app:
     name: Test Server Application
     runs-on: ubuntu-latest
-    container: node:18.12.1-alpine3.15
-    strategy:
-      matrix:
-        redis-host:
-          - redis
-        redis-port:
-          - 6379
-        db-user:
-          - username
-        db-password:
-          - password
+    container: node:18.12.1-alpine3.1
     services:
         redis:
           image: redis
@@ -102,7 +92,8 @@ jobs:
       - name: "Run tests"
         run: npm test
         env:
-          REDIS_URL: redis://${{ matrix.redis-host }}:${{ matrix.redis-port }}
+          REDIS_HOST: redis
+          REDIS_PORT: 6379
     
         
 
