@@ -73,7 +73,7 @@ jobs:
   test-app:
     name: Test Server Application
     runs-on: ubuntu-latest
-    container: node:10.18-jessie
+    container: node:20
     services:
         redis:
           image: redis
@@ -83,14 +83,14 @@ jobs:
             --health-timeout 5s
             --health-retries 5
     steps:
-      - name: Checkout Repo
+      - name: "Checkout Repo"
         uses: actions/checkout@v4.1.1
       
-      - name: Install deps
+      - name: "Install deps"
         run: npm i
 
-      - name: Connect to Redis
-        run: node client.js
+      - name: "Run tests"
+        run: npm test
         env:
             REDIS_HOST: redis
             REDIS_PORT: 6379
