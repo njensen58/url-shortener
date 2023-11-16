@@ -1,16 +1,18 @@
 import express, { NextFunction, Request, Response } from 'express';
-import { createClient } from 'redis';
 import { addHttp } from './helpers';
 import Config from './config';
 import path from 'path';
 import shortenerRouter from './routers/shortenerRouter';
+import RedisService from './services/redisService';
 
-const app = express();
-const client = createClient();
+export const app = express();
+const redisService = new RedisService();
+const client = redisService.createClient();
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-// Redirect service...
+// Redirect middleware...
 app.use(async (req: Request, res: Response, next: NextFunction) => {
     const requestedSiteKey = req.path.slice(1);
     if (requestedSiteKey.length >= 5) {
@@ -28,16 +30,12 @@ app.use(express.static(path.join(__dirname, "..", "..", "client", "dist", "index
 
 app.use("/api", shortenerRouter(client));
 
-const listenPort = (PORT: number) => {
-    app.listen(PORT, () =>
-        console.log(`Server running on http://localhost:${PORT}`)
-    );
-};
-
 async function start() {
-    await client.connect();
+    await redisService.connect();
     client.on('error', err => console.log('Redis Client Error', err))
-    await listenPort(Config.SERVICE_PORT);
+    app.listen(Config.SERVICE_PORT, () =>
+        console.log(`Server running on http://localhost:${Config.SERVICE_PORT}`)
+    );
 };
 
 // Global catch all
@@ -46,6 +44,4 @@ app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
     return res.status(500).json({ error: "Something went wrong." });
 })
 
-export default {
-    start
-}
+export default { start }

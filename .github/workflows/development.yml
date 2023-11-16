@@ -13,6 +13,41 @@ on:
   workflow_call:
 
 jobs:
+  tsc:
+    name: tsc-build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.1.1
+
+      - name: "setup node"
+        uses: actions/setup-node@v4.0.0
+        with: 
+          node-version: 18
+      
+      - name: "install dependencies"
+        run: npm i && cd client && npm i
+
+      - name: tsc
+        uses: icrawl/action-tsc@v1
+  
+  build:
+    name: client-build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.1.1
+
+      - name: "setup node"
+        uses: actions/setup-node@v4.0.0
+        with: 
+          node-version: 18
+      
+      - name: "install dependencies"
+        run: npm i && cd client && npm i
+
+      - name: "build client"
+        run: npm run build-client
+      
+
   test:
     name: Test Application
     runs-on: ubuntu-latest
@@ -30,10 +65,9 @@ jobs:
         run: npm i -g npm@latest
 
       - name: "install dependencies"
-        uses: Jaid/action-npm-install@v1.2.4
+        run: npm i && cd client && npm i
 
-      # TODO: Reintroduce once tests are being merged to main
-      # - name: "run tests"
-      #   run: npm run test-client --passWithNoTests
+      - name: "run tests"
+        run: npm run test-client --passWithNoTests
         
 

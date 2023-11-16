@@ -18,7 +18,7 @@ const InputScreen = ({
 }: IProps) => {
     return (<div className="shadow-md bg-zinc-200 rounded p-2">
         <FaCompress className="inline my-2 mb-2 mr-1" />
-        <label htmlFor="name">Shorten a long URL</label>
+        <label id="name" htmlFor="name">Shorten a long URL</label>
         <input
             name="url"
             type="text"
@@ -26,9 +26,10 @@ const InputScreen = ({
             onChange={handleUrlChange}
             placeholder="Enter long link here"
             className="rounded p-1 w-4/5 block mb-2"
+            aria-labelledby="name"
         />
         <FaMagic className="my-2 mr-2 mb-2 inline" />
-        <label htmlFor="alias" className="inline">Customize your link</label>
+        <label id="alias" htmlFor="alias" className="inline">Customize your link</label>
         <input
             name="alias"
             type="text"
@@ -36,6 +37,7 @@ const InputScreen = ({
             onChange={handleAliasChange}
             placeholder="Enter alias"
             className="rounded p-1 w-4/5 block"
+            aria-labelledby="alias"
         />
         <p className="text-xs">Alias must be at least 5 alphanumeric characters.</p>
         <div className="flex justify-center">

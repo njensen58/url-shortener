@@ -2,13 +2,19 @@
     "compilerOptions": {
         "jsx": "react-jsx",
         "strict": true,
-        "baseUrl": "./node_modules",
+        "baseUrl": "./src",
         "esModuleInterop": true,
         "target": "es5",
         "lib": [
             "es5",
             "dom"
-        ]
+        ],
+        "moduleResolution": "node",
+        "paths": {
+            "test-utils": [
+                "./utils/test-utils"
+            ]
+        }
     },
     "include": [
         "src/**/*.tsx"
