@@ -1,5 +1,4 @@
 const request = require('supertest');
-const { app } = require('../index.ts');
 const { createClient } = require('redis');
 import RedisService from "../services/redisService";
 import {
@@ -18,6 +17,7 @@ describe("Server", () => {
         const connection = `redis://:@${startedContainer.getHost()}:${startedContainer.getMappedPort(6379)}`
         redisClient = createClient(connection)
         jest.spyOn(RedisService.prototype, 'createClient').mockImplementationOnce(() => redisClient)
+        await redisClient.connect();
     })
 
     afterAll(async () => {
@@ -25,7 +25,12 @@ describe("Server", () => {
         await redisClient.quit();
     })
 
+    afterEach(async () => {
+        redisClient && await redisClient.sendCommand(["FLUSHALL"]);
+    })
+
     it("returns error if invalid URL provided", async () => {
+        const { app } = require('../index.ts');
         const result = await request(app)
             .post("/api")
             .send({ url: "invalid" })
@@ -35,6 +40,7 @@ describe("Server", () => {
     });
 
     it("returns error if invalid ALIAS provided", async () => {
+        const { app } = require('../index.ts');
         const result = await request(app)
             .post('/api')
             .send({ url: "www.google.com", alias: "bad" })
@@ -44,21 +50,32 @@ describe("Server", () => {
     });
 
     it("returns alias short if valid alias and no collision", async () => {
+        const { app } = require('../index.ts');
         const result = await request(app)
             .post("/api")
             .send({ url: "www.google.com", alias: "gooder" })
             .set('Accept', 'application/json');
-
+        expect(result.status).toBe(201)
     });
 
-    // #TODO: Not passing, seems to be the redis mock client is not being
-    // overwritten in time when `app` is loaded
+    it("returns error if alias is taken", async () => {
+        const { app } = require('../index.ts');
+        await redisClient.set("gooder", "www.google.com")
+        const result = await request(app)
+            .post('/api')
+            .send({ url: "www.yahoo.com", alias: "gooder" })
+            .set('Accept', 'application/json')
+        expect(result.status).toBe(500)
+    });
 
-    // it("returns error if alias is taken", async () => {
-    //     const result = await request(app)
-    //         .post('/api')
-    //         .send({ url: "www.yahoo.com", alias: "gooder" })
-    //         .set('Accept', 'application/json')
-    //     expect(result.status).toBe(500)
-    // });
+    it("returns new short url given valid long url", async () => {
+        const { app } = require('../index.ts');
+        const result = await request(app)
+            .post('/api')
+            .send({ url: "www.hotmail.com", alias: "" })
+            .set('Accept', 'application/json')
+        expect(result.status).toBe(201)
+        expect(result.body.short_url).toBeDefined()
+        expect(result.body.key).toBeDefined()
+    });
 })

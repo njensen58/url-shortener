@@ -48,8 +48,8 @@ jobs:
         run: npm run build-client
       
 
-  test:
-    name: Test Application
+  test-client:
+    name: Test Client Application
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -69,5 +69,31 @@ jobs:
 
       - name: "run tests"
         run: npm run test-client --passWithNoTests
+  
+  test-app:
+    name: Test Server Application
+    runs-on: ubuntu-latest
+    container: node:10.18-jessie
+    services:
+        redis:
+          image: redis
+          options: >-
+            --health-cmd "redis-cli ping"
+            --health-interval 10s
+            --health-timeout 5s
+            --health-retries 5
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4.1.1
+      
+      - name: Install deps
+        run: npm i
+
+      - name: Connect to Redis
+        run: node client.js
+        env:
+            REDIS_HOST: redis
+            REDIS_PORT: 6379
+    
         
 

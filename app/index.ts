@@ -18,6 +18,7 @@ app.use(async (req: Request, res: Response, next: NextFunction) => {
     if (requestedSiteKey.length >= 5) {
         const redirectTo = await client.get(requestedSiteKey);
         if (!!redirectTo) {
+            // #TODO: Should be a 302?
             return res.redirect(301, addHttp(redirectTo))
         } else {
             return res.status(404).json('')
@@ -30,6 +31,12 @@ app.use(express.static(path.join(__dirname, "..", "..", "client", "dist", "index
 
 app.use("/api", shortenerRouter(client));
 
+// Global catch all
+app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
+    console.error(error);
+    return res.status(500).json({ error: "Something went wrong." });
+})
+
 async function start() {
     await redisService.connect();
     client.on('error', err => console.log('Redis Client Error', err))
@@ -37,11 +44,5 @@ async function start() {
         console.log(`Server running on http://localhost:${Config.SERVICE_PORT}`)
     );
 };
-
-// Global catch all
-app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
-    console.error(error);
-    return res.status(500).json({ error: "Something went wrong." });
-})
 
 export default { start }

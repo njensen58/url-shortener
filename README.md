@@ -9,6 +9,9 @@
 ## Techs
 - Tailwindcss, jest, Webpack, postcss
 
+## CI
+- Github actions
+
 ## Get Started
  * install dependencies for Client and App with `npm i` in root and client dirs.
  * Create a local docker redis container (requires redis and docker installation first).
@@ -19,4 +22,4 @@
 ## Issues / TODO
 * No collision handling, collision = NoGo
 * No network load balancing 
-* No tests written
+* Backend tests not passing fully, so not included in CI currently
